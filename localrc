@@ -1,0 +1,41 @@
+HOST_IP=127.0.0.1
+DEST=/opt/stack
+
+ADMIN_PASSWORD=openstack
+MYSQL_PASSWORD=mysql
+RABBIT_PASSWORD=rabbitmq
+SERVICE_PASSWORD=openstack
+SERVICE_TOKEN=token
+
+disable_service n-net
+enable_service q-svc
+enable_service q-agt
+enable_service q-dhcp
+enable_service q-l3
+enable_service q-meta
+enable_service neutron
+enable_service ceilometer
+enable_service q-fwaas
+enable_service q-lbaas
+
+LOGFILE=/opt/stack/logs/stack.sh.log
+LOGDAYS=1
+SCREEN_LOGDIR=$DEST/logs/screen
+
+#NOVA_BRANCH=master
+#GLANCE_BRANCH=mater
+#KEYSTONE_BRANCH=master
+#HORIZON_BRANCH=master
+#CINDER_BRANCH=master
+#NEUTRON_BRANCH=master
+#CEILOMETER_BRANCH=master
+#HEAT_BRANCH=master
+
+FIXED_RANGE=10.0.0.0/24
+NETWORK_GATEWAY=10.0.0.1
+FLOATING_RANGE=172.24.1.0/24
+PUBLIC_NETWORK_GATEWAY=172.24.1.1
+
+ENABLE_TENANT_TUNNELS=True
+PHYSICAL_NETWORK=physnet1
+OVS_PHYSICAL_BRIDGE=br-ex
