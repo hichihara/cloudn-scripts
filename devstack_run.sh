@@ -21,13 +21,17 @@ SSHCMD="$SSH -i $SSH_KEY -t -l ubuntu"
 SCP="scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 SCPCMD="$SCP -i $SSH_KEY"
 
-vone="6192292c-1249-4b5b-aeb7-9a0637850d4b"
-vtwo="baa050fe-12fe-4b55-b2c5-b3df3c03e871"
-vfour="fa6ca004-ca90-47a4-bd5c-9c9570bf36cb"
-veight="2573b3c3-6e8f-4377-8ff2-26d6030ddc88"
+#usa_vone="6192292c-1249-4b5b-aeb7-9a0637850d4b"
+#usa_vtwo="baa050fe-12fe-4b55-b2c5-b3df3c03e871"
+#usa_vfour="fa6ca004-ca90-47a4-bd5c-9c9570bf36cb"
+#usa_veight="2573b3c3-6e8f-4377-8ff2-26d6030ddc88"
+vtwo="0b41ab6e-696e-4a91-b623-5b880e3be7a6"
+vfour="3164027a-3636-4cd5-a8be-f76d51d93a1a"
+veight="a40f2dba-e51d-4175-a41d-8c0047e589b7"
 SERVICEOFFERINGID=$vfour
 #TEMPLATEID=""
-ZONEID="d308161c-0311-4c60-9828-e671847f6f21"
+ZONEID="1b02e74c-6c21-4aa3-b96c-51042de8fccd"
+#usa_ZONEID="d308161c-0311-4c60-9828-e671847f6f21"
 
 function echo_summary() {
     echo "$@" >&6
@@ -90,18 +94,15 @@ function run_vm() {
     TITLE="start virtual machine: vm"
     title "++"
 
-	VM_ID=`./kick_api.sh command=deployVirtualMachine serviceofferingid=$SERVICEOFFERINGID templateid=$TEMPLATEID zoneid=$ZONEID | python -c "import sys, fileinput; from xml.etree.ElementTree import *; elem=fromstring([line for line in fileinput.input()][0]); sys.stdout.write(elem.findtext('id'));"`
+    VM_ID=`./kick_api.sh command=deployVirtualMachine serviceofferingid=$SERVICEOFFERINGID templateid=$TEMPLATEID zoneid=$ZONEID | python -c "import sys, fileinput; from xml.etree.ElementTree import *; elem=fromstring([line for line in fileinput.input()][0]); sys.stdout.write(elem.findtext('id'));"`
     result "" $? "++"
-
-	VM_IP=`./kick_api.sh command=listVirtualMachines | python -c "import sys, fileinput; from xml.etree.ElementTree import *; elem=fromstring([line for line in fileinput.input()][0]); [sys.stdout.write(item.find('nic').findtext('ipaddress')) for item in elem.getiterator('virtualmachine') if item.findtext('id') == '$VM_ID'];"`
-
-	ipaddr=$VM_IP
     
     TITLE="wait for virtual machine to come up: vm"
     title "++"
     fail=1
     for (( i=0; i<36; i++ )); do
-        $SSHCMD $ipaddr true
+	VM_IP=`./kick_api.sh command=listVirtualMachines | python -c "import sys, fileinput; from xml.etree.ElementTree import *; elem=fromstring([line for line in fileinput.input()][0]); [sys.stdout.write(item.find('nic').findtext('ipaddress')) for item in elem.getiterator('virtualmachine') if item.findtext('id') == '$VM_ID'];"`
+        $SSHCMD $VM_IP true
         if [ $? -eq 0 ]; then
             fail=0
             break
