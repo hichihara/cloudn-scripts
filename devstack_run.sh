@@ -127,8 +127,8 @@ function install_pkgs() {
 set -x
 $APTGETUPDATE > /dev/null
 $APTGETINSTALL git
-$SUDO sh -c "echo '127.0.0.1       localhost ubuntu' > /etc/hosts"
-$SUDO sh -c "echo '127.0.1.1       ubuntu' >> /etc/hosts"
+$SUDO sh -c "echo '127.0.0.1       localhost citest' > /etc/hosts"
+$SUDO sh -c "echo '127.0.1.1       citest' >> /etc/hosts"
 EOF
 
     result "" $? "++"
